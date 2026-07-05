@@ -38,7 +38,7 @@ export default function BossQuizPage() {
       (total, item, index) => total + (answers[index] === item.answerIndex ? 1 : 0),
       0
     );
-    const award = finishBossQuiz(score);
+    const award = finishBossQuiz(score, questions.length);
     setResult({
       score,
       xpAwarded: award.xpAwarded,

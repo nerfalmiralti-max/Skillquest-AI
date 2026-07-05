@@ -10,7 +10,8 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/quiz", label: "Boss Quiz" },
   { href: "/achievements", label: "Achievements" },
-  { href: "/tutor", label: "AI Tutor" }
+  { href: "/tutor", label: "AI Tutor" },
+  { href: "/auth", label: "Account" }
 ];
 
 export function SiteNav() {

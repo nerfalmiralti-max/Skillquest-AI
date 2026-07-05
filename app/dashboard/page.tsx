@@ -155,7 +155,9 @@ export default function DashboardPage() {
                       <button
                         type="button"
                         disabled={completed}
-                        onClick={() => completeQuest(quest.id, quest.xp, todayKey)}
+                        onClick={() =>
+                          completeQuest(quest.id, quest.xp, todayKey, quest.title)
+                        }
                         className={`focus-ring inline-flex min-w-40 items-center justify-center gap-2 rounded-md px-4 py-3 text-sm font-black transition ${
                           completed
                             ? "cursor-not-allowed bg-meadow text-white"
