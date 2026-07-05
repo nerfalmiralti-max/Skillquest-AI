@@ -63,6 +63,27 @@ export default function AuthPage() {
     setMessage("Signed out. Your local fallback progress is still available on this device.");
   }
 
+  async function handleGoogleSignIn() {
+    const supabase = getSupabaseBrowserClient();
+    if (!supabase) {
+      return;
+    }
+
+    setStatus("sending");
+    setMessage("");
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`
+      }
+    });
+
+    if (error) {
+      setStatus("error");
+      setMessage(error.message);
+    }
+  }
+
   return (
     <main className="quest-grid min-h-[calc(100vh-4rem)] py-10 sm:py-16">
       <div className="section-shell max-w-3xl">
@@ -104,33 +125,44 @@ export default function AuthPage() {
               </button>
             </div>
           ) : (
-            <form onSubmit={handleMagicLink} className="mt-6 space-y-4">
-              <label className="block">
-                <span className="text-sm font-black uppercase text-slate-500">
-                  Email address
-                </span>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  className="focus-ring mt-2 w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-base text-ink shadow-sm outline-none"
-                  placeholder="student@example.com"
-                />
-              </label>
+            <div className="mt-6 space-y-5">
               <button
-                type="submit"
+                type="button"
+                onClick={() => void handleGoogleSignIn()}
                 disabled={status === "sending"}
-                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md bg-ember px-5 py-3 text-sm font-black text-white shadow-sm transition hover:bg-[#c84e2b] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-black text-ink shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
               >
-                {status === "sending" ? (
-                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                ) : (
-                  <Mail className="h-4 w-4" aria-hidden="true" />
-                )}
-                Send Magic Link
+                Continue with Google
               </button>
-            </form>
+
+              <form onSubmit={handleMagicLink} className="space-y-4">
+                <label className="block">
+                  <span className="text-sm font-black uppercase text-slate-500">
+                    Email address
+                  </span>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    className="focus-ring mt-2 w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-base text-ink shadow-sm outline-none"
+                    placeholder="student@example.com"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md bg-ember px-5 py-3 text-sm font-black text-white shadow-sm transition hover:bg-[#c84e2b] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                >
+                  {status === "sending" ? (
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                  ) : (
+                    <Mail className="h-4 w-4" aria-hidden="true" />
+                  )}
+                  Send Magic Link
+                </button>
+              </form>
+            </div>
           )}
 
           {message ? (

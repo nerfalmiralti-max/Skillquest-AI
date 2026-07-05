@@ -26,6 +26,11 @@ body {
     sans-serif;
 }
 
+.dark body {
+  background: #020617;
+  color: #f8fafc;
+}
+
 button,
 a,
 input,
